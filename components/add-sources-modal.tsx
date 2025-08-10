@@ -73,9 +73,7 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
               Discover sources
             </Button>
             <DialogClose asChild>
-              <Button variant="ghost" className="h-8 w-8 rounded-full text-white hover:bg-white/10" aria-label="Close">
-                <X className="h-4 w-4" />
-              </Button>
+
             </DialogClose>
           </div>
         </div>
