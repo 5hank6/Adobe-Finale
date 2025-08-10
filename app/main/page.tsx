@@ -44,14 +44,14 @@ export default function MainPage() {
 
       {/* Exactly three vertical columns (1/3 each). Stays horizontal at all widths. */}
       <div className="w-full px-3 py-3">
-        <div className="grid h-[calc(100dvh-24px)] w-full grid-cols-3 gap-4">
+        <div className="grid h-[calc(100dvh-24px)] w-full gap-4 lg:grid-cols-4 md:grid-cols-3 md:grid-cols-3">
           {/* 1/3 width */}
           <div className="h-full">
             <SourcesPanel sources={sources} onOpenAdd={openModal} />
           </div>
 
           {/* 1/3 width */}
-          <div className="h-full">
+          <div className="h-full lg:col-span-2 md:col-span-2 col-span-1">
             <CenterIntake
               title={title}
               hasSources={sources.length > 0}
