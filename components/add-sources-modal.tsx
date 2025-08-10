@@ -3,9 +3,21 @@
 import * as React from "react"
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { UploadCloud, Search, FolderOpen, X } from "lucide-react"
+import {
+  UploadCloud,
+  Search,
+  X,
+  Folder,
+  Youtube,
+  Link,
+  Pencil,
+  FileText,
+  Cloud,
+  FileTextIcon,
+  HardDrive,
+  FileStack,
+} from "lucide-react"
 
 type Props = {
   open: boolean
@@ -19,7 +31,10 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null)
 
   function onlyPDFs(list: File[]): File[] {
-    const pdfs = list.filter((f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"))
+    const pdfs = list.filter(
+      (f) =>
+        f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"),
+    )
     if (pdfs.length !== list.length) {
       alert("Only PDF files are allowed.")
     }
@@ -31,7 +46,7 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
     if (pdfs.length === 0) return
     setFiles((prev) => [...prev, ...pdfs].slice(0, 300))
     onFilesAdded?.(pdfs)
-    onOpenChange(false) // auto-close after choosing/dropping PDFs
+    onOpenChange(false)
   }
 
   function handleFiles(selected: FileList | null) {
@@ -54,37 +69,42 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         aria-describedby={undefined}
-        className="max-w-[1180px] border-none bg-[rgb(34,36,38)] p-0 text-white shadow-2xl sm:rounded-2xl"
+        className="max-w-2xl md:max-w-[70rem] w-full border-none bg-[rgb(20,21,23)] text-white shadow-2xl sm:rounded-2xl p-0
+                   h-[95vh] md:h-auto flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-7 py-5">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
-              <FolderOpen className="h-4 w-4 text-white/90" />
-            </span>
-            <div className="text-xl font-semibold">Add sources</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              className="h-8 rounded-full bg-white/10 px-3 text-xs text-white hover:bg-white/15"
-            >
-              <Search className="mr-1 h-3.5 w-3.5" />
-              Discover sources
-            </Button>
-            <DialogClose asChild>
+        {/* Header */}
+  <div className="flex items-center justify-between gap-3 px-6 py-4 border-b border-gray-700">
+    <div className="flex items-center gap-2">
+      <Folder className="h-5 w-5 text-neutral-400" />
+      <div className="text-xl font-semibold">Add sources</div>
+    </div>
+    <div className="flex items-center gap-4">
+      <Button
+        variant="ghost"
+        className="h-9 px-4 rounded-full text-sm text-neutral-400 hover:text-white hover:bg-gray-700 transition-colors"
+      >
+        <Search className="mr-2 h-4 w-4" />
+        Discover sources
+      </Button>
+      {/* This is the DialogClose that was causing the duplicate icon. It should be removed. */}
+      {/* The DialogClose is now handled by the modal's default closing mechanism. */}
+      {/* <DialogClose asChild>
+        <button className="rounded-full p-1 text-neutral-400 hover:bg-gray-700 hover:text-white transition-colors">
+          <X className="h-5 w-5" />
+        </button>
+      </DialogClose> */}
+    </div>
+  </div>
 
-            </DialogClose>
-          </div>
-        </div>
-
-        {/* Body */}
-        <div className="px-7 pb-7 pt-6">
-          <p className="max-w-4xl text-[13px] leading-6 text-neutral-300">
-            Add PDFs to ground responses with the information that matters to you. PDF only.
+        {/* Body (scrollable) */}
+        <div className="flex-1 overflow-y-auto px-6 py-8">
+          <p className="text-sm text-neutral-400 max-w-lg mb-6">
+            Sources let NotebookLM base its responses on the information that matters most to you.
+            (Examples: marketing plans, course reading, research notes, meeting transcripts, sales documents, etc.)
           </p>
 
-          {/* Dropzone (PDF only) */}
+          {/* Dropzone */}
           <div
             onDragOver={(e) => {
               e.preventDefault()
@@ -93,29 +113,27 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
             onDragLeave={() => setDragOver(false)}
             onDrop={onDrop}
             className={[
-              "mt-4 rounded-xl border-2 border-dashed p-10",
-              dragOver ? "border-fuchsia-500/70 bg-fuchsia-500/5" : "border-white/15 bg-[rgb(30,32,34)]",
+              "rounded-xl border-2 border-dashed p-10 text-center",
+              dragOver ? "border-sky-500/70 bg-sky-500/5" : "border-gray-700 bg-gray-800/50",
             ].join(" ")}
             role="region"
             aria-label="Upload PDF sources"
           >
-            <div className="mx-auto flex min-h-[260px] max-w-3xl flex-col items-center justify-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
-                <UploadCloud className="h-6 w-6 text-white/90" />
-              </div>
-              <div className="mt-3 text-[15px] font-medium">Upload PDF sources</div>
-              <p className="mt-1 text-[13px] text-neutral-400">
+            <div className="mx-auto flex flex-col items-center justify-center">
+              <UploadCloud className="h-10 w-10 text-neutral-400" />
+              <div className="mt-4 text-sm font-medium">Upload sources</div>
+              <p className="mt-1 text-xs text-neutral-500">
                 Drag & drop or{" "}
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="font-medium text-fuchsia-400 underline-offset-4 hover:underline"
+                  className="font-medium text-sky-400 underline-offset-4 hover:underline"
                 >
-                  choose PDF
+                  choose file
                 </button>{" "}
                 to upload
               </p>
-              <p className="mt-3 text-[12px] text-neutral-500">Supported file types: PDF</p>
+              <p className="mt-2 text-xs text-neutral-600">Supported file types: PDF, .txt, Markdown, Audio (e.g. mp3)</p>
 
               <input
                 ref={fileInputRef}
@@ -128,31 +146,30 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
             </div>
           </div>
 
-          {/* Optional helper tiles (visual only) */}
-          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          {/* New Grid Layout for Sources */}
+          <div className="mt-8 grid md:grid-cols-3 gap-6">
             <TileGroup title="Cloud files">
-              <SourceButton label="Google Drive (PDF)" />
-              <SourceButton label="Google Docs (export PDF)" />
-              <SourceButton label="Google Slides (export PDF)" />
+              <SourceButton label="Google Drive" icon={HardDrive} />
+              <SourceButton label="Google Docs" icon={FileText} />
+              <SourceButton label="Google Slides" icon={FileStack} />
             </TileGroup>
             <TileGroup title="Links">
-              <SourceButton label="Link (PDF URL)" />
-              <SourceButton label="Website (download PDF)" />
-              <SourceButton label="YouTube (transcript → PDF)" />
+              <SourceButton label="Website" icon={Link} />
+              <SourceButton label="YouTube" icon={Youtube} />
             </TileGroup>
             <TileGroup title="Text">
-              <SourceButton label="Paste text (save as PDF)" />
-              <SourceButton label="Copied text (save as PDF)" />
+              <SourceButton label="Paste text" icon={Pencil} />
+              <SourceButton label="Copied text" icon={FileTextIcon} />
             </TileGroup>
           </div>
+        </div>
 
-          {/* Bottom: limit */}
-          <div className="mt-6 flex items-center gap-3">
-            <div className="text-[12px] text-neutral-400">Source limit</div>
-            <Progress value={progress} className="h-2 w-full bg-white/5" />
-            <div className="w-16 text-right text-[12px] text-neutral-400">
-              {used} / {limit}
-            </div>
+        {/* Bottom: limit */}
+        <div className="px-6 py-4 flex items-center gap-4 border-t border-gray-700 flex-shrink-0">
+          <div className="text-xs text-neutral-400 whitespace-nowrap">Source limit</div>
+          <Progress value={progress} className="h-2 flex-1 bg-neutral-800" />
+          <div className="w-16 text-right text-xs text-neutral-400 whitespace-nowrap">
+            {used} / {limit}
           </div>
         </div>
       </DialogContent>
@@ -162,21 +179,24 @@ export function AddSourcesModal({ open, onOpenChange, onFilesAdded }: Props) {
 
 function TileGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Card className="border-white/10 bg-[rgb(28,30,32)] p-3">
-      <div className="mb-2 text-[12px] font-medium text-neutral-300">{title}</div>
-      <div className="flex flex-wrap gap-2">{children}</div>
-    </Card>
+    <div className="p-4 rounded-xl border border-gray-700 bg-gray-800/50">
+      <div className="mb-4 text-xs font-semibold text-neutral-400 uppercase tracking-wider">{title}</div>
+      <div className="flex flex-col gap-3">
+        {children}
+      </div>
+    </div>
   )
 }
 
-function SourceButton({ label }: { label: string }) {
+// Updated SourceButton to accept an icon component
+function SourceButton({ label, icon: Icon }: { label: string; icon: React.ComponentType<{ className?: string }> }) {
   return (
     <button
       type="button"
-      className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-black/20 px-3 py-2 text-[12px] text-neutral-200 transition-colors hover:bg-white/10"
+      className="inline-flex items-center gap-3 rounded-lg border border-gray-600 bg-gray-900/50 px-4 py-3 text-sm text-neutral-300 transition-colors hover:bg-gray-700"
       onClick={() => alert(`${label} — coming soon`)}
     >
-      <span className="inline-flex h-4 w-4 items-center justify-center rounded-[3px] bg-white/10" />
+      <Icon className="w-4 h-4 text-neutral-400 flex-shrink-0" />
       <span>{label}</span>
     </button>
   )
