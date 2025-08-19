@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+.next/
+# miscellaneous
+.DS_Store
+.env
+/venv
+venv/
+/.venv
+.env.local
+
+
+/public/model1
+public/model2/*
+/python/model_2/models/bge-small-en-v1.5
+/python/model_2/models/cross-encoder-ms-marco
+/public/audio/*
